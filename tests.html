@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Salsa20 tests</title>
+		<link rel="stylesheet" href="tests/qunit.css">		
+		<script type="text/javascript" src="tests/qunit.js"></script>
+		<script type="text/javascript" src="tests/jquery.js"></script>
+		
+		<script type="text/javascript" src="salsa20.js"></script>
+		<script type="text/javascript" src="tests/tests.js"></script>
+		
+		<!-- Worker for testing the hash function iterated 1,000,000 times -->
+		<script id="salsa20-hash-worker" type="javascript/worker">
+			
+			// Use ECMAScript 5's strict mode
+			'use strict';
+			
+			// Import scripts to be used
+			importScripts(baseUrl + 'salsa20.js');
+			
+			// Get data from the process which started the worker thread
+			this.addEventListener('message', function(event)
+			{
+				var hashTest4 = event.data.hashTest4;
+				
+				// Perform the hash a million times
+				for (var i = 0; i < 1000000; i++)
+				{
+					hashTest4 = Salsa20.hash(hashTest4);
+				}
+				
+				// Send it back to the main thread
+				this.postMessage({ hashTest4: hashTest4 });
+				
+			}, false);
+		</script>
+		
+		<!-- Worker for testing the encryption -->
+		<script id="salsa20-encryption-worker" type="javascript/worker">
+			
+			// Use ECMAScript 5's strict mode
+			'use strict';
+			
+			// Import scripts to be used
+			importScripts(baseUrl + 'salsa20.js');
+			
+			// Get data from the process which started the worker thread
+			this.addEventListener('message', function(event)
+			{
+				var key = event.data.key;
+				var message = event.data.message;
+				var nonce = event.data.nonce;
+				var counter = event.data.counter;
+				
+				// Do the encryption
+				var ciphertext = Salsa20.encrypt(key, message, nonce, counter);
+				
+				// Send it back to the main thread
+				this.postMessage({ ciphertext: ciphertext });
+				
+			}, false);
+		</script>
+		
+		<!-- Worker for testing the decryption -->
+		<script id="salsa20-decryption-worker" type="javascript/worker">
+			
+			// Use ECMAScript 5's strict mode
+			'use strict';
+			
+			// Import scripts to be used
+			importScripts(baseUrl + 'salsa20.js');
+			
+			// Get data from the process which started the worker thread
+			this.addEventListener('message', function(event)
+			{
+				var key = event.data.key;
+				var ciphertext = event.data.ciphertext;
+				var nonce = event.data.nonce;
+				var counter = event.data.counter;
+				
+				// Do the encryption
+				var plaintext = Salsa20.decrypt(key, ciphertext, nonce, counter);
+				
+				// Send it back to the main thread
+				this.postMessage({ plaintext: plaintext });
+				
+			}, false);
+		</script>
+	</head>
+	<body>
+		<div id="qunit"></div>
+		<div id="qunit-fixture"></div>
+	</body>	
+</html>
