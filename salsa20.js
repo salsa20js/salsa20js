@@ -519,7 +519,7 @@ var Salsa20 = {
 	 */
 	parseKey: function(key)
 	{
-		try	{			
+		try {			
 			if ((key instanceof Uint8Array) || (key instanceof Array))
 			{
 				// Normalise the key to a regular array
