@@ -69,7 +69,7 @@ var Salsa20 = {
 		}
 		
 		// Work out how many extra characters we need to add to the string
-		var charsToAdd = (totalCharacters - inputString.length)/padCharacter.length;
+		var charsToAdd = (totalCharacters - inputString.length) / padCharacter.length;
 		
 		// Add padding onto the string
 		for (var i = 0; i < charsToAdd; i++)
