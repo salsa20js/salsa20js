@@ -3,11 +3,14 @@
 A fully unit tested, implementation of Daniel J. Bernstein's Salsa20 cryptographic algorithm in JavaScript.
 
 * Full 20 rounds.
-* The implementation accepts either 128 or 256 bit keys.
-* It supports starting the encryption/decryption from random block positions by allowing the user to specify the start counter.
+* Supports 128 bit and 256 bit keys.
+* Developed from the Salsa20 specification, not a port of the C reference implementation.
+* Passes all test vectors in the Salsa20 specification.
+* Supports starting encryption and decryption from desired block positions by allowing the user to specify the start counter.
 * A variety of input formats are accepted for the key, message and nonce. 
-* It can also output the ciphertext as an array of bytes or hexadecimal string.
-* It will run fine inside a web worker thread.
+* Encodes and decodes text from ASCII/UTF-8.
+* Supports outputting the ciphertext as an array of bytes or hexadecimal string.
+* Runs fine inside a HTML5 web worker thread.
 
 #### Usage
 ##### Running the unit tests
