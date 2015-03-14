@@ -27,7 +27,7 @@
 				// Perform the hash a million times
 				for (var i = 0; i < 1000000; i++)
 				{
-					hashTest4 = Salsa20.hash(hashTest4);
+					hashTest4 = Salsa20.core.hash(hashTest4);
 				}
 				
 				// Send it back to the main thread
@@ -84,6 +84,33 @@
 				
 				// Send it back to the main thread
 				this.postMessage({ plaintext: plaintext });
+				
+			}, false);
+		</script>
+		
+		<!-- Worker for testing the keystream generation -->
+		<script id="salsa20-keystream-worker" type="javascript/worker">
+			
+			// Use ECMAScript 5's strict mode
+			'use strict';
+			
+			// Import scripts to be used
+			importScripts(baseUrl + 'salsa20.js');
+			
+			// Get data from the process which started the worker thread
+			this.addEventListener('message', function(event)
+			{
+				var key = event.data.key;
+				var length = event.data.length;
+				var nonce = event.data.nonce;
+				var counter = event.data.counter;
+				var options = event.data.options;
+				
+				// Do the encryption
+				var keystream = Salsa20.generateKeystream(key, length, nonce, counter, options);
+				
+				// Send it back to the main thread
+				this.postMessage({ keystream: keystream });
 				
 			}, false);
 		</script>

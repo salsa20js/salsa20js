@@ -1,0 +1,7 @@
+Section 8: The Salsa20 hash function final test with 1,000,000 iterations:  1202180 ms (1202.180 s). Using regular arrays and hex strings. Using Firefox.
+
+Section 8: The Salsa20 hash function final test with 1,000,000 iterations:  880176 ms (877.489 s). Using TypedArrays. Using Firefox.
+Section 8: The Salsa20 hash function final test with 1,000,000 iterations:  918686 ms (918.686 s). Using TypedArrays. Removed erase function. Using Firefox.
+
+Section 8: The Salsa20 hash function final test with 1,000,000 iterations:  201787 ms (201.787 s). Using TypedArrays. Using Chrome.
+Section 8: The Salsa20 hash function final test with 1,000,000 iterations:  174077 ms (174.077 s). Using TypedArrays. Removed erase function. Using Chrome.

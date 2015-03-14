@@ -1,82 +1,119 @@
-### salsa20js
+### Salsa20js
 
-A fully unit tested, implementation of Daniel J. Bernstein's Salsa20 cryptographic algorithm in JavaScript.
+A trustworthy, fully unit tested, implementation of Daniel J. Bernstein's Salsa20 cryptographic algorithm in JavaScript. 
+This stream cipher algorithm was selected as a winner in the eSTREAM competition. A reduced 12 round variant (Salsa20/12) 
+was selected for the eSTREAM software portfolio.
 
-* Full 20 rounds.
+This implementation:
+
+* Uses the full 20 rounds (Salsa20/20), not the weaker/reduced round variants (Salsa20/8 and Salsa20/12).
 * Supports 128 bit and 256 bit keys.
-* Developed from the Salsa20 specification, not a port of the C reference implementation.
-* Passes all test vectors in the Salsa20 specification.
+* Was developed from the Salsa20 specification document, not a port of the C reference implementation.
+* Is written with clean coding principles, is well commented and easily matches back to the specification.
+* Has a provably correct implementation by passing all test vectors in the Salsa20 specification and more.
 * Supports starting encryption and decryption from desired block positions by allowing the user to specify the start counter.
-* A variety of input formats are accepted for the key, message and nonce. 
+* Accepts a variety of input formats for the key, message and nonce. 
 * Encodes and decodes text from ASCII/UTF-8.
-* Supports outputting the ciphertext as an array of bytes or hexadecimal string.
-* Runs fine inside a HTML5 web worker thread.
+* Supports ciphertext output as a typed array of bytes or hexadecimal string.
+* Runs inside HTML5 web worker threads if required.
 
-#### Usage
-##### Running the unit tests
+### Author
 
-It is important to run the unit tests to make sure everything works on your system. Export the files to a directory. Then open tests.html in your browser (preferably Firefox or Chrome).
+This library is written and maintained by Joshua M. David. The author has absolutely no affiliation with any government, 
+spy agency or surveillance organisation. This library is certified by the author to be free of intentional backdoors or weaknesses.
 
-##### Importing the library
+### Licence
+
+This project is licensed under the GNU General Public License Version 3.
+
+### Usage
+#### Requirements
+
+A modern browser such as Firefox, Google Chrome or Chromium which has JavaScript typed array support. Ideally it will 
+also support `window.crypto.getRandomValues()` to run the unit tests.
+
+#### Running the unit tests
+
+It is important to run the unit tests to make sure everything works on your system. Export the files to a directory then open `tests.html` in your browser.
+
+#### Importing the library
 
 ```HTML
 <script type="text/javascript" src="salsa20.js"></script>
 ```
 
-##### Generating a cryptographically secure key
+#### Generating a cryptographically secure key
+
+Using the Web Crypto API it is possible to generate a reasonably secure key. However you can use any method you like.
 
 ```JavaScript
-var key = new Uint8Array(16);			// 128 bit key in bytes
-window.crypto.getRandomValues(key);		// Fill the typed array with random bytes from the Web Crypto API
+var key = new Uint8Array(16);          // 128 bit key in bytes
+window.crypto.getRandomValues(key);    // Fill the typed array with random bytes from the Web Crypto API
 ```
 
 Or preferably:
 
 ```JavaScript
-var key = new Uint8Array(32);			// 256 bit key in bytes
-window.crypto.getRandomValues(key);		// Fill the typed array with random bytes from the Web Crypto API
+var key = new Uint8Array(32);          // 256 bit key in bytes
+window.crypto.getRandomValues(key);    // Fill the typed array with random bytes from the Web Crypto API
 ```
 
-##### Encryption
+#### Encryption
 
 ```JavaScript
 var ciphertext = Salsa20.encrypt(key, message, nonce, counter, options);
 ```
 
-`key` The key can be a hexadecimal string e.g. 'ab0de1f2...' or array of bytes e.g. [0, 255, 22, ...] equal to 128 bits or 256 bits.
+* `key` The key can be a hexadecimal string e.g. `ab0de1f2...` or typed array of bytes (Uint8Array) e.g. `[255, 0, 22, ...]` equal to 128 bits or 256 bits.
+* `message` The plaintext message. This can be a typed array of bytes (Uint8Array), a ASCII/UTF-8 string or also a hexadecimal string e.g. `ab0de1f2` if `inputTextType: 'hex'` is passed in the options object.
+* `nonce` A 64-bit one-time cryptographic nonce i.e. the message number. This can be input as a hexadecimal string of 16 symbols e.g. `cd23ef45ab670189`, a Uint8Array array of 8 bytes e.g. `new Uint8Array([23, 255, 0, 214, 129, 78, 33, 21])` or an integer between `0` and `9007199254740991` inclusive.
+* `counter` An integer specifying the block to start encrypting from. Normally a `0` should be passed in. If encrypting part of a large file it is also possible to enter the block number and it will start encrypting from that point. The maximum integer allowed for JavaScript is `9007199254740991` (2<sup>53</sup> - 1).
+* `options` Optional object with properties:
+    * `inputTextType: 'hex'` - The input message will be a hexadecimal string, otherwise by default it will parse it as an ASCII/UTF-8 string
+    * `returnType: 'hex'` - Returns the encrypted data as a hexadecimal string, otherwise by default it will return a typed array of bytes (Uint8Array)
 
-`message` The plaintext message. This can be an array of bytes, a ASCII/UTF-8 string or also a hexadecimal string e.g. 'ab0de1f2...' if { inputTextType: 'hex' } is passed in the options object.
-
-`nonce` A 64-bit one time cryptographic nonce i.e. the message number. This can be input as a hexadecimal string of 16 symbols, a byte array of 8 bytes or an integer between 0 and 2^53 inclusive.
-
-`counter` An integer specifying the block to start encrypting from. Normally a 0 should be passed. If encrypting part of a large file it is also possible to enter the block number and it will start encrypting from that point. The maximum integer allowed for JavaScript is 2^53 (9007199254740992).
-
-`options` Optional object with additional options:
-    `inputTextType: 'hex'` - The input message will be a hexadecimal string, otherwise by default it will parse it as an ASCII/UTF-8 string
-    `returnType: 'hex'` - Returns the encrypted data as a hexadecimal string, otherwise by default it will return an array of bytes
-
-##### Decryption
+#### Decryption
 
 ```JavaScript
 var message = Salsa20.encrypt(key, ciphertext, nonce, counter, options);
 ```
 
-`key` The key can be a hexadecimal string e.g. 'ab0de1f2...' or array of bytes e.g. [0, 255, 22, ...] equal to 128 bits or 256 bits.
+* `key` The key can be a hexadecimal string e.g. `ab0de1f2...` or typed array of bytes (Uint8Array) e.g. `[255, 0, 22, ...]` equal to 128 bits or 256 bits.
+* `ciphertext` The ciphertext message. This can be a typed array of bytes (Uint8Array) or also a hexadecimal string e.g. `ab0de1f2...` if `inputTextType: 'hex'` is passed in the options object. Otherwise a byte array is used as default.
+* `nonce` A 64-bit one-time cryptographic nonce i.e. the message number. This can be input as a hexadecimal string of 16 symbols e.g. `cd23ef45ab670189`, a Uint8Array array of 8 bytes e.g. `new Uint8Array([23, 255, 0, 214, 129, 78, 33, 21])` or an integer between `0` and `9007199254740991` inclusive.
+* `counter` An integer specifying the block to start decrypting from. Normally a `0` should be passed in. If decrypting part of a large file it is also possible to enter the block number and it will start decrypting from that point. The maximum integer allowed for JavaScript is `9007199254740991` (2<sup>53</sup> - 1).
+* `options` Optional object with additional options:
+	* `inputTextType: 'hex'` - The input ciphertext will be a hex string, otherwise by default it will parse it as a typed array of bytes (Uint8Array)
+    * `returnType: 'hex'` - Returns the decrypted data as a hexadecimal string, otherwise by default it will return an ASCII/UTF-8 string
 
-`ciphertext` The ciphertext message. This can be an array of bytes or also a hexadecimal string e.g. 'ab0de1f2...' if { inputTextType: 'hex' } is passed in the options object. Otherwise a byte array is used as default.
+#### Keystream generation
 
-`nonce` A 64-bit one time cryptographic nonce i.e. the message number. This can be input as a hexadecimal string of 16 symbols, a byte array of 8 bytes or an integer between 0 and 2^53 inclusive.
+Generates a Salsa20 keystream based on a key, nonce and start counter. This can be used if you just want the raw keystream bytes, for example, to use in a cascaded stream cipher. The keystream will be at least the length of the `length` parameter entered and the number of random bytes returned will be the first multiple of the Salsa20 block size (64 bytes) after that. For example: length `53`, returns 64 bytes and length `77`, returns 128 bytes. It is your responsibility to truncate the produced keystream to the exact length you need.
 
-`counter` An integer specifying the block to start decrypting from. Normally a 0 should be passed. If decrypting part of a large file it is also possible to enter the block number and it will start decrypting from that point. The maximum integer allowed for JavaScript is 2^53 (9007199254740992).
+```JavaScript
+var options = { returnType: 'hex' };
+var keystream = Salsa20.generateKeystream(key, length, nonce, counter, options);
+```
 
-`options` Optional object with additional options:
-    `inputTextType: 'hex'` - The input ciphertext will be a hex string, otherwise by default it will parse it as an array of bytes
-    `returnType: 'hex'` - Returns the decrypted data as a hexadecimal string, otherwise by default it will return an ASCII/UTF-8 string
+* `key` The key can be a hexadecimal string e.g. `ab0de1f2...` or typed array of bytes (Uint8Array) e.g. `[255, 0, 22, ...]` equal to 128 bits or 256 bits.
+* `length` An integer representing the minimum length of the keystream required.
+* `nonce` A 64-bit one-time cryptographic nonce i.e. the message number. This can be input as a hexadecimal string of 16 symbols e.g. `cd23ef45ab670189`, a Uint8Array array of 8 bytes e.g. `new Uint8Array([23, 255, 0, 214, 129, 78, 33, 21])` or an integer between `0` and `9007199254740991` inclusive.
+* `counter` An integer specifying the block to start keystream generation from. Normally a `0` should be passed in. The maximum integer allowed for JavaScript is `9007199254740991` (2<sup>53</sup> - 1).
+* `options` Optional object with additional options:
+    * `returnType: 'hex'` - Returns the keystream as a hexadecimal string, otherwise by default it will return a typed array of bytes (Uint8Array)
 
-##### Code examples
+### Extra code examples
 
-See towards the end of the unit tests in the tests/tests.js file.
+See towards the end of the unit tests in the `tests/tests.js` file.
 
-##### Feedback
+### Code review
 
-Please make a new issue on GitHub [for this project](https://github.com/salsa20js/salsa20js/issues).
+The library has had a preliminary review on [StackExchange Code Review](https://codereview.stackexchange.com/q/80017). Feel free to provide a more formal security analysis if you wish.
+
+### Code signing
+
+Tagged releases in the source code repository are signed with GnuPG Key ID: `DC768471C467B6D0`. Fingerprint: `CF3F 79EE 0114 59BA 0A59 9E9C DC76 8471 C467 B6D0`.
+
+### Feedback 
+
+If you find any bugs or have suggestions for improvement, please create a new publicly visible issue or Pull Request on GitHub [for this project](https://github.com/salsa20js/salsa20js/issues).
