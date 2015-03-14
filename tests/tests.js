@@ -1,5 +1,7 @@
 /**
- * Salsa20/20 implementation unit tests
+ * Salsa20js - Salsa20/20 JavaScript implementation - unit tests
+ * https://github.com/salsa20js/salsa20js
+ * Copyright (C) 2015 Joshua M. David
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

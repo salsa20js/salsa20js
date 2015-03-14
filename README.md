@@ -108,7 +108,7 @@ See towards the end of the unit tests in the `tests/tests.js` file.
 
 ### Code review
 
-The library has had a preliminary review on [StackExchange Code Review](https://codereview.stackexchange.com/q/80017). Feel free to provide a more formal security analysis if you wish.
+Thanks to [ferada](https://codereview.stackexchange.com/users/54571/ferada) for some excellent recommendations on improving the library on [StackExchange Code Review](https://codereview.stackexchange.com/q/80017). Anyone is welcome to review the code and provide further analysis or suggestions for improvement.
 
 ### Code signing
 
@@ -116,4 +116,11 @@ Tagged releases in the source code repository are signed with GnuPG Key ID: `DC7
 
 ### Feedback 
 
-If you find any bugs or have suggestions for improvement, please create a new publicly visible issue or Pull Request on GitHub [for this project](https://github.com/salsa20js/salsa20js/issues).
+If you find any bugs or have some suggestions for improvement, please create a new issue or Pull Request on GitHub [for the project](https://github.com/salsa20js/salsa20js/issues).
+
+### Donate
+
+If you found the library useful in your project, donations are welcome at:
+
+* Bitcoin: `16h8K8sXCobL5u7wKRPG95F8XAc735P8TM`
+* Litecoin: `Ld2X3Uyknq87GktF38q2ZQopyevRwC4hji`
