@@ -22,9 +22,9 @@ This implementation:
 This library is written and maintained by Joshua M. David. The author has absolutely no affiliation with any government, 
 spy agency or surveillance organisation. This library is certified by the author to be free of intentional backdoors or weaknesses.
 
-### Licence
+### License
 
-This project is licensed under the GNU General Public License Version 3.
+This project is licensed under the [MIT License](http://opensource.org/licenses/MIT).
 
 ### Usage
 #### Requirements
