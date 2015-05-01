@@ -75,7 +75,7 @@ var ciphertext = Salsa20.encrypt(key, message, nonce, counter, options);
 #### Decryption
 
 ```JavaScript
-var message = Salsa20.encrypt(key, ciphertext, nonce, counter, options);
+var message = Salsa20.decrypt(key, ciphertext, nonce, counter, options);
 ```
 
 * `key` The key can be a hexadecimal string e.g. `ab0de1f2...` or typed array of bytes (Uint8Array) e.g. `[255, 0, 22, ...]` equal to 128 bits or 256 bits.
